@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      - 'POSTGRES_PASSWORD=hd932mtu'
+      - 'POSTGRES_USER=hd932mtu'
+      - 'POSTGRES_DB=hd932mtu'
+    ports:
+      - '5432:5432'
+    volumes:
+      - './initdb:/docker-entrypoint-initdb.d'
+      - 'postgres_data:/var/lib/postgresql/data'
+  app:
+    image: php-nginx-pdo:latest
+    container_name: web-app
+    ports:
+      - '80:8080'
+    volumes:
+      - '.:/var/www/html'
+    depends_on:
+      - postgres
+networks:
+  default:
+    driver: bridge
+    name: webnet
+volumes:
+  postgres_data:
